@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 public class SheetsQuickStart {
   private static final String APPLICATION_NAME = "BarCode Scan Query";
@@ -31,7 +32,9 @@ public class SheetsQuickStart {
    * If modifying these scopes, delete your previously saved tokens/ folder.
    */
   private static final List<String> SCOPES =
-      Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+      // Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+      new ArrayList<>(SheetsScopes.all());
+
   private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
   /**
