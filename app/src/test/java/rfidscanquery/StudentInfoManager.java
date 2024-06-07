@@ -5,8 +5,14 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class StudentInfoManager {
+
+    private Map<String, StudentInfo> studentIdMap = new HashMap<>();
+    private Map<String, StudentInfo> nfcIdMap = new HashMap<>();
 
     public static StudentInfo getStudentInfo(String sheetId, String studentId) throws GeneralSecurityException, IOException {
         SheetsQuickStart quickStart = new SheetsQuickStart();
@@ -36,6 +42,7 @@ public class StudentInfoManager {
         private String firstName;
         private String lastName;
         private String studentId;
+        private String nfcId;
 
         public StudentInfo(String firstName, String lastName, String studentId) {
             this.firstName = firstName;
@@ -54,6 +61,12 @@ public class StudentInfoManager {
         public String getStudentId() {
             return studentId;
         }
+        public String getNfcId() {
+            return nfcId;
+        }
+        public void setNfcId(String nfcId) {
+            this.nfcId = nfcId;
+        }
 
         @Override
         public String toString() {
@@ -64,4 +77,53 @@ public class StudentInfoManager {
                     '}';
         }
     }
+
+    public void addStudent(StudentInfo student) {
+        studentIdMap.put(student.getStudentId(), student);
+        if (student.getNfcId() != null) {
+            nfcIdMap.put(student.getNfcId(), student);
+        }
+    }
+
+    public StudentInfo getStudentInfoByNfcId(String nfcId) {
+        StudentInfo student = nfcIdMap.get(nfcId);
+
+        if (student != null) {
+            return student;
+        } else {
+            System.out.println("No match for NFC ID. Please enter your student ID:");
+            String studentId = getUserInput();
+
+            student = queryStudentDataByStudentId(studentId);
+            if (student != null) {
+                matchStudentIdToNfcId(studentId, nfcId);
+                return student;
+            } else {
+                System.out.println("Invalid student ID. Please restart.");
+                return null;
+            }
+        }
+    }
+
+    public StudentInfo queryStudentDataByStudentId(String studentId) {
+        return studentIdMap.get(studentId);
+    }
+
+    public StudentInfo matchStudentIdToNfcId(String studentId, String nfcId) {
+        StudentInfo student = studentIdMap.get(studentId);
+        if (student != null) {
+            student.setNfcId(nfcId);
+            nfcIdMap.put(nfcId, student);
+            System.out.println("NFC ID successfully matched to student ID.");
+        } else {
+            System.out.println("Failed to match NFC ID to student ID.");
+        }
+        return student;
+    }
+
+    private String getUserInput() {
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+    
 }
