@@ -18,7 +18,7 @@ public class StudentInfoManager {
         SheetsQuickStart quickStart = new SheetsQuickStart();
         Sheets service = quickStart.getService();
 
-        String range = "User!A:C"; // for the "User" subsheet
+        String range = "User!A:D"; // for the "User" subsheet
 
         ValueRange response = service.spreadsheets().values()
             .get(sheetId, range)
@@ -30,7 +30,8 @@ public class StudentInfoManager {
                 if (row.get(2).equals(studentId)) { // Student ID is in the third column
                     String firstName = row.get(0).toString(); // First name is in the first column
                     String lastName = row.get(1).toString();  // Last name is in the second column
-                    return new StudentInfo(firstName, lastName, studentId);
+                    String nfcID = row.get(2).toString(); // NFC ID in fourth column
+                    return new StudentInfo(firstName, lastName, studentId, nfcID);
                 }
             }
         }
@@ -44,7 +45,7 @@ public class StudentInfoManager {
         private String studentId;
         private String nfcId;
 
-        public StudentInfo(String firstName, String lastName, String studentId) {
+        public StudentInfo(String firstName, String lastName, String studentId, String nfcID2) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.studentId = studentId;
@@ -74,6 +75,7 @@ public class StudentInfoManager {
                     "firstName='" + firstName + '\'' +
                     ", lastName='" + lastName + '\'' +
                     ", studentId='" + studentId + '\'' +
+                    ", nfcID = '" + nfcId + '\'' +
                     '}';
         }
     }
