@@ -70,7 +70,7 @@ public class SheetsQuickStart {
     // Build a new authorized API client service.
     final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     final String spreadsheetId = "17TKyWMRgxCRlMNKiBuL4yK1KuRjs5vhsoSUD7aajfZ8";
-    final String range = "User!A:C";
+    final String range = "User!A:D";
     Sheets service =
         new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
             .setApplicationName(APPLICATION_NAME)
